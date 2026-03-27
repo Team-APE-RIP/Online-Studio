@@ -6,14 +6,16 @@ services:
     working_dir: /app
     env_file:
       - ${PROJECT_ROOT}/.env
+    environment:
+      SERVER_PORT: 3001
     ports:
-      - "${SERVER_PORT:-14011}:${SERVER_PORT:-14011}"
+      - "${SERVER_PORT:-14011}:3001"
     command: >
       sh -lc "
-      npm install &&
+      npm install --include=dev --no-fund --no-audit &&
       npm run build --workspace @team-ape-rip/shared &&
       npm run build --workspace @team-ape-rip/server &&
-      npm run start --workspace @team-ape-rip/server
+      NODE_ENV=production npm run start --workspace @team-ape-rip/server
       "
     volumes:
       - ${PROJECT_ROOT}:/app
@@ -35,14 +37,16 @@ services:
     working_dir: /app
     env_file:
       - ${PROJECT_ROOT}/.env
+    environment:
+      PORT: 14010
     ports:
       - "${WEB_PORT:-14010}:14010"
     command: >
       sh -lc "
-      npm install &&
+      npm install --include=dev --no-fund --no-audit &&
       npm run build --workspace @team-ape-rip/shared &&
       npm run build --workspace @team-ape-rip/web &&
-      npm run start --workspace @team-ape-rip/web
+      NODE_ENV=production npm run start --workspace @team-ape-rip/web
       "
     volumes:
       - ${PROJECT_ROOT}:/app
