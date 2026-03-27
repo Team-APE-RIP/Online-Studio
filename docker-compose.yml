@@ -1,17 +1,17 @@
 services:
   web:
     build:
-      context: .
-      dockerfile: ./infra/docker/web.Dockerfile
+      context: ${PROJECT_ROOT}
+      dockerfile: ${PROJECT_ROOT}/infra/docker/web.Dockerfile
     container_name: team-ape-rip-web
     restart: unless-stopped
     env_file:
-      - .env
+      - ${PROJECT_ROOT}/.env
     ports:
       - "${WEB_PORT:-14010}:14010"
     volumes:
-      - ./runtime/logs/web:/app/runtime/logs/web
-      - ./runtime/compose/web:/app/runtime/compose/web
+      - ${PROJECT_ROOT}/runtime/logs/web:/app/runtime/logs/web
+      - ${PROJECT_ROOT}/runtime/compose/web:/app/runtime/compose/web
     depends_on:
       - server
     networks:
@@ -19,20 +19,20 @@ services:
 
   server:
     build:
-      context: .
-      dockerfile: ./infra/docker/server.Dockerfile
+      context: ${PROJECT_ROOT}
+      dockerfile: ${PROJECT_ROOT}/infra/docker/server.Dockerfile
     container_name: team-ape-rip-server
     restart: unless-stopped
     env_file:
-      - .env
+      - ${PROJECT_ROOT}/.env
     ports:
       - "${SERVER_PORT:-14011}:${SERVER_PORT:-14011}"
     volumes:
-      - ./runtime/logs/server:/app/runtime/logs/server
-      - ./runtime/uploads:/app/runtime/uploads
-      - ./runtime/temp:/app/runtime/temp
-      - ./runtime/cache:/app/runtime/cache
-      - ./runtime/compose/server:/app/runtime/compose/server
+      - ${PROJECT_ROOT}/runtime/logs/server:/app/runtime/logs/server
+      - ${PROJECT_ROOT}/runtime/uploads:/app/runtime/uploads
+      - ${PROJECT_ROOT}/runtime/temp:/app/runtime/temp
+      - ${PROJECT_ROOT}/runtime/cache:/app/runtime/cache
+      - ${PROJECT_ROOT}/runtime/compose/server:/app/runtime/compose/server
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
