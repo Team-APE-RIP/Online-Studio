@@ -4,14 +4,15 @@
   "private": true,
   "scripts": {
     "build": "npm run build --workspace @team-ape-rip/shared && nest build",
-    "start": "npm run build --workspace @team-ape-rip/shared && node --env-file=../../.env dist/apps/server/src/main.js",
-    "start:dev": "npm run build --workspace @team-ape-rip/shared && npm run build && node --env-file=../../.env dist/apps/server/src/main.js",
-    "start:prod": "npm run build --workspace @team-ape-rip/shared && node --env-file=../../.env dist/apps/server/src/main.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate deploy",
-    "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:push": "prisma db push",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "with:db-env": "node --env-file=../../.env scripts/with-db-env.mjs",
+    "start": "npm run with:db-env -- node dist/apps/server/src/main.js",
+    "start:dev": "npm run build --workspace @team-ape-rip/shared && npm run build && npm run with:db-env -- node dist/apps/server/src/main.js",
+    "start:prod": "npm run with:db-env -- node dist/apps/server/src/main.js",
+    "prisma:generate": "npm run with:db-env -- prisma generate",
+    "prisma:migrate": "npm run with:db-env -- prisma migrate deploy",
+    "prisma:migrate:dev": "npm run with:db-env -- prisma migrate dev",
+    "prisma:push": "npm run with:db-env -- prisma db push",
+    "prisma:seed": "npm run with:db-env -- ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.11",

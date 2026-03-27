@@ -6,6 +6,7 @@ services:
     working_dir: /app
     env_file:
       - ${PROJECT_ROOT}/.env
+      - ${PROJECT_ROOT}/runtime/compose/server/server.env
     environment:
       SERVER_PORT: 3001
     ports:
@@ -14,7 +15,6 @@ services:
       sh -lc "
       npm install --include=dev --no-fund --no-audit &&
       npm run prisma:generate --workspace @team-ape-rip/server &&
-      npm run build --workspace @team-ape-rip/shared &&
       npm run build --workspace @team-ape-rip/server &&
       NODE_ENV=production npm run start --workspace @team-ape-rip/server
       "
@@ -45,7 +45,6 @@ services:
     command: >
       sh -lc "
       npm install --include=dev --no-fund --no-audit &&
-      npm run build --workspace @team-ape-rip/shared &&
       npm run build --workspace @team-ape-rip/web &&
       NODE_ENV=production npm run start --workspace @team-ape-rip/web
       "
