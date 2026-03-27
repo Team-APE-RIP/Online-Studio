@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: infra/docker/web.Dockerfile
+      dockerfile: ./infra/docker/web.Dockerfile
     container_name: team-ape-rip-web
     restart: unless-stopped
     env_file:
@@ -20,7 +20,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: infra/docker/server.Dockerfile
+      dockerfile: ./infra/docker/server.Dockerfile
     container_name: team-ape-rip-server
     restart: unless-stopped
     env_file:
