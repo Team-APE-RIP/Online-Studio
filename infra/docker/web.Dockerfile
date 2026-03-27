@@ -3,13 +3,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY apps/web/package.json apps/web/package.json
-COPY apps/server/package.json apps/server/package.json
-COPY packages/shared/package.json packages/shared/package.json
+COPY apps ./apps
+COPY packages ./packages
 
 RUN npm install
-
-COPY . .
 
 RUN npm run build --workspace @team-ape-rip/web
 

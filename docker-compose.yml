@@ -1,33 +1,23 @@
 services:
-  web:
-    build:
-      context: ${PROJECT_ROOT}
-      dockerfile: ${PROJECT_ROOT}/infra/docker/web.Dockerfile
-    container_name: team-ape-rip-web
-    restart: unless-stopped
-    env_file:
-      - ${PROJECT_ROOT}/.env
-    ports:
-      - "${WEB_PORT:-14010}:14010"
-    volumes:
-      - ${PROJECT_ROOT}/runtime/logs/web:/app/runtime/logs/web
-      - ${PROJECT_ROOT}/runtime/compose/web:/app/runtime/compose/web
-    depends_on:
-      - server
-    networks:
-      - team-ape-rip-network
-
   server:
-    build:
-      context: ${PROJECT_ROOT}
-      dockerfile: ${PROJECT_ROOT}/infra/docker/server.Dockerfile
+    image: node:20-alpine
     container_name: team-ape-rip-server
     restart: unless-stopped
+    working_dir: /app
     env_file:
       - ${PROJECT_ROOT}/.env
     ports:
       - "${SERVER_PORT:-14011}:${SERVER_PORT:-14011}"
+    command: >
+      sh -lc "
+      npm install &&
+      npm run build --workspace @team-ape-rip/shared &&
+      npm run build --workspace @team-ape-rip/server &&
+      npm run start --workspace @team-ape-rip/server
+      "
     volumes:
+      - ${PROJECT_ROOT}:/app
+      - team-ape-rip-node-modules:/app/node_modules
       - ${PROJECT_ROOT}/runtime/logs/server:/app/runtime/logs/server
       - ${PROJECT_ROOT}/runtime/uploads:/app/runtime/uploads
       - ${PROJECT_ROOT}/runtime/temp:/app/runtime/temp
@@ -38,6 +28,35 @@ services:
     networks:
       - team-ape-rip-network
 
+  web:
+    image: node:20-alpine
+    container_name: team-ape-rip-web
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - ${PROJECT_ROOT}/.env
+    ports:
+      - "${WEB_PORT:-14010}:14010"
+    command: >
+      sh -lc "
+      npm install &&
+      npm run build --workspace @team-ape-rip/shared &&
+      npm run build --workspace @team-ape-rip/web &&
+      npm run start --workspace @team-ape-rip/web
+      "
+    volumes:
+      - ${PROJECT_ROOT}:/app
+      - team-ape-rip-node-modules:/app/node_modules
+      - ${PROJECT_ROOT}/runtime/logs/web:/app/runtime/logs/web
+      - ${PROJECT_ROOT}/runtime/compose/web:/app/runtime/compose/web
+    depends_on:
+      - server
+    networks:
+      - team-ape-rip-network
+
 networks:
   team-ape-rip-network:
     driver: bridge
+
+volumes:
+  team-ape-rip-node-modules:
