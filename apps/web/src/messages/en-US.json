@@ -1,0 +1,170 @@
+{
+  "common": {
+    "appName": "Team APE:RIP Online Studio",
+    "enterStudio": "Enter Studio",
+    "switchLanguage": "Switch language",
+    "systemStatus": "System status"
+  },
+  "home": {
+    "eyebrow": "APE HOI4 Online Studio",
+    "nav": {
+      "capabilities": "Capabilities",
+      "architecture": "Architecture"
+    },
+    "hero": {
+      "title": "An online studio built for HOI4 creation and collaboration",
+      "subtitle": "Centered around focus trees, localization, docs and team workflows, this studio turns scattered HOI4 tooling into one cohesive workspace experience.",
+      "primaryCta": "Enter the Studio",
+      "secondaryCta": "View Architecture",
+      "side": {
+        "tag": "Studio Vision",
+        "title": "Not a generic admin panel, but a workstation for creation workflows",
+        "description": "The homepage follows the Team APE:RIP portal style, while the studio area carries the dual-theme console language so the landing page and workspace share one visual DNA.",
+        "cardOne": {
+          "title": "Dual-theme workspace",
+          "description": "A dark neon-purple mode and a sakura soft-pink mode, without relying on system auto theme."
+        },
+        "cardTwo": {
+          "title": "Actually visible i18n",
+          "description": "Chinese and English content is wired into next-intl instead of only existing as placeholder message files."
+        }
+      },
+      "metricsTag": "Platform Signals"
+    },
+    "metrics": {
+      "deploy": "Deployment",
+      "theme": "Theme",
+      "locale": "Locale"
+    },
+    "highlight": {
+      "plugin": {
+        "tag": "Modular",
+        "title": "A modular studio foundation",
+        "description": "Built around resources, projects, organizations and realtime collaboration instead of being just another one-off demo page."
+      },
+      "localization": {
+        "tag": "Localization",
+        "title": "Truly visible multilingual support",
+        "description": "The homepage and the studio will both expose real Chinese/English switching instead of hiding i18n behind unused files."
+      },
+      "collaboration": {
+        "tag": "Realtime",
+        "title": "Realtime workflow first",
+        "description": "Both Focus Tree and Localization will keep evolving around presence, conflict messaging and collaborative status visibility."
+      }
+    },
+    "capabilities": {
+      "eyebrow": "Core Capabilities",
+      "title": "Key workspaces for HOI4 team collaboration",
+      "description": "This studio is not a low-end generic form site. It is designed around the actual production chain of HOI4 content creation.",
+      "items": {
+        "focusTree": {
+          "tag": "Focus",
+          "title": "Focus Tree Studio",
+          "description": "A unified canvas workspace for focus nodes, links, dependencies and collaborative editing state."
+        },
+        "localization": {
+          "tag": "Loc",
+          "title": "Localization Workspace",
+          "description": "A dedicated control center for keys, translations, missing entries, import/export and collaborative localization editing."
+        },
+        "docs": {
+          "tag": "Docs",
+          "title": "Docs & Planning",
+          "description": "A document space for planning, specs, dev logs and future Markdown / Diagram collaboration."
+        }
+      }
+    },
+    "architecture": {
+      "eyebrow": "Architecture Direction",
+      "title": "Build the long-term structure first, then keep expanding capabilities",
+      "description": "This version is not just about polishing pages. It is about establishing the visual system, theme system, multilingual layer and workspace shell of Team APE:RIP Online Studio.",
+      "items": {
+        "stack": {
+          "title": "Stable full-stack foundation",
+          "description": "Next.js + NestJS + MySQL keeps the system scalable as the studio grows."
+        },
+        "tenant": {
+          "title": "Clear organization and project hierarchy",
+          "description": "The studio is built around Organization / Project / Resource so collaboration can keep growing without structural rewrites."
+        },
+        "runtime": {
+          "title": "Consistent deployment and runtime conventions",
+          "description": "Docker Compose and runtime/ directory rules stay aligned with the BaoTa Linux deployment model."
+        },
+        "realtime": {
+          "title": "Prepared for stronger realtime collaboration",
+          "description": "The current version already has first-pass presence and revision conflict handling, with room for deeper sync models later."
+        }
+      }
+    },
+    "heroTitle": "An online collaboration studio built for HOI4 modding teams",
+    "heroSubtitle": "Designed for long-term scalability with real-time collaboration, focus tree design, localization management and organization-level resource workflows.",
+    "projectSectionTitle": "Core Capabilities",
+    "architectureSectionTitle": "Architecture Direction"
+  },
+  "studio": {
+    "roles": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "maintainer": "Maintainer",
+      "editor": "Editor",
+      "viewer": "Viewer",
+      "guest": "Guest"
+    },
+    "page": {
+      "eyebrow": "Organization Console",
+      "title": "My Organizations",
+      "subtitle": "Only the organizations you belong to are shown here, together with repository and project summaries.",
+      "primaryCta": "Create Organization",
+      "secondaryCta": "Back to Home",
+      "authCardTag": "Current Account",
+      "scopeTitle": "Access Scope",
+      "scopeDescription": "The Studio home only shows content from organizations you belong to. Project access continues from each organization.",
+      "loading": "Loading organizations&",
+      "error": "Organization data is temporarily unavailable.",
+      "emptyTitle": "No organizations available",
+      "emptyDescription": "Create a new organization or wait for an invitation to join one.",
+      "sectionTag": "Organizations",
+      "sectionTitle": "Organization List",
+      "sectionDescription": "Open the workspaces that belong to your organizations from here.",
+      "openOrganization": "Open Organization",
+      "repositories": "Repositories",
+      "projects": "Projects",
+      "updatedAt": "Updated",
+      "stats": {
+        "organizations": "Organizations",
+        "repositories": "Repositories",
+        "projects": "Projects",
+        "memberships": "Memberships"
+      },
+      "statsHints": {
+        "organizations": "Organizations currently available to this account",
+        "repositories": "Total connected repositories",
+        "projects": "Total registered projects",
+        "memberships": "Organization memberships for this account"
+      }
+    },
+    "organization": {
+      "back": "Back to My Organizations",
+      "eyebrow": "Organization Workspace",
+      "subtitle": "View projects and core information for the current organization.",
+      "loading": "Loading organization data&",
+      "accessDeniedTitle": "Organization unavailable",
+      "accessDeniedDescription": "This account does not belong to the organization, or the organization data is unavailable.",
+      "createProject": "Create Project",
+      "projectsTag": "Projects",
+      "projectsTitle": "Project List",
+      "projectsDescription": "All project entries under the current organization.",
+      "emptyProjects": "There are no projects in this organization yet.",
+      "openProject": "Open Project",
+      "projectDescriptionFallback": "No project description yet.",
+      "stats": {
+        "repositories": "Repositories",
+        "projects": "Projects",
+        "role": "Role",
+        "updated": "Updated"
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Runtime directories
+runtime/logs/**
+runtime/temp/**
+runtime/cache/**
+runtime/compose/**
+runtime/uploads/**
+
+# Keep directory structure
+!runtime/logs/.gitkeep
+!runtime/logs/web/.gitkeep
+!runtime/logs/server/.gitkeep
+!runtime/temp/.gitkeep
+!runtime/cache/.gitkeep
+!runtime/compose/.gitkeep
+!runtime/compose/web/.gitkeep
+!runtime/compose/server/.gitkeep
+!runtime/uploads/.gitkeep
+
+# Prisma / generated
+apps/server/prisma/dev.db
+apps/server/generated/
+
+# Misc
+*.tsbuildinfo

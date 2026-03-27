@@ -1,0 +1,43 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+    container_name: team-ape-rip-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${WEB_PORT:-14010}:14010"
+    volumes:
+      - ./runtime/logs/web:/app/runtime/logs/web
+      - ./runtime/compose/web:/app/runtime/compose/web
+    depends_on:
+      - server
+    networks:
+      - team-ape-rip-network
+
+  server:
+    build:
+      context: .
+      dockerfile: infra/docker/server.Dockerfile
+    container_name: team-ape-rip-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_PORT:-14011}:${SERVER_PORT:-14011}"
+    volumes:
+      - ./runtime/logs/server:/app/runtime/logs/server
+      - ./runtime/uploads:/app/runtime/uploads
+      - ./runtime/temp:/app/runtime/temp
+      - ./runtime/cache:/app/runtime/cache
+      - ./runtime/compose/server:/app/runtime/compose/server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - team-ape-rip-network
+
+networks:
+  team-ape-rip-network:
+    driver: bridge

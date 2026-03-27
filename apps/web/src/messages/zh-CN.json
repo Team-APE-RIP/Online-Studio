@@ -1,0 +1,170 @@
+{
+  "common": {
+    "appName": "Team APE:RIP Online Studio",
+    "enterStudio": "进入工作室",
+    "switchLanguage": "切换语言",
+    "systemStatus": "系统状态"
+  },
+  "home": {
+    "eyebrow": "APE HOI4 Online Studio",
+    "nav": {
+      "capabilities": "核心能力",
+      "architecture": "架构方向"
+    },
+    "hero": {
+      "title": "围绕 HOI4 创作与协同而生的在线工作室",
+      "subtitle": "以国策树、本地化、文档与团队协作为核心，把 HOI4 Modding 从零散工具堆叠升级为统一工作台体验。",
+      "primaryCta": "立即进入工作室",
+      "secondaryCta": "查看架构方向",
+      "side": {
+        "tag": "Studio Vision",
+        "title": "不是普通管理后台，而是面向创作流程的工作站",
+        "description": "首页采用 Team APE:RIP 门户式主视觉，操作区则承接双色主题工作台语言，让产品首页与 Studio 控制台拥有一致的设计血统。",
+        "cardOne": {
+          "title": "双色主题操作台",
+          "description": "暗紫霓虹与樱花浅粉双主题，不再依赖系统自动判断。"
+        },
+        "cardTwo": {
+          "title": "多语言真实可见",
+          "description": "中英文文案接入 next-intl，不再只是预留 messages 文件。"
+        }
+      },
+      "metricsTag": "Platform Signals"
+    },
+    "metrics": {
+      "deploy": "部署方式",
+      "theme": "主题模式",
+      "locale": "语言"
+    },
+    "highlight": {
+      "plugin": {
+        "tag": "Modular",
+        "title": "模块化工作室骨架",
+        "description": "围绕资源、项目、组织与实时协同建立长期可扩展的工作台结构，而不是一次性演示页面。"
+      },
+      "localization": {
+        "tag": "Localization",
+        "title": "真正可见的多语言能力",
+        "description": "首页与后续工作台将统一接入中英双语，不再出现“说有多语言但界面看不到”的问题。"
+      },
+      "collaboration": {
+        "tag": "Realtime",
+        "title": "实时协同体验优先",
+        "description": "Focus Tree 与 Localization 都会持续沿着 Presence、冲突提示和协同状态可视化打磨。"
+      }
+    },
+    "capabilities": {
+      "eyebrow": "Core Capabilities",
+      "title": "围绕 HOI4 团队协作的关键工作区",
+      "description": "当前工作室不是泛用低配表单站，而是围绕 HOI4 内容生产链路，优先建设真正高频使用的创作空间。",
+      "items": {
+        "focusTree": {
+          "tag": "Focus",
+          "title": "Focus Tree Studio",
+          "description": "用于国策树节点、连线、依赖关系与多人协作状态的统一画布工作区。"
+        },
+        "localization": {
+          "tag": "Loc",
+          "title": "Localization Workspace",
+          "description": "用于 key、翻译、缺失项、导入导出与后续协同编辑的本地化控制中心。"
+        },
+        "docs": {
+          "tag": "Docs",
+          "title": "Docs & Planning",
+          "description": "用于策划案、规范、开发日志与未来 Markdown / Diagram 协作的文档空间。"
+        }
+      }
+    },
+    "architecture": {
+      "eyebrow": "Architecture Direction",
+      "title": "先把长期演化结构搭好，再持续填充能力",
+      "description": "这一版不只是在修页面，而是在把 Team APE:RIP Online Studio 的视觉系统、主题系统、多语言和工作台骨架真正建立起来。",
+      "items": {
+        "stack": {
+          "title": "全栈结构稳定",
+          "description": "Next.js + NestJS + MySQL 维持长期可扩展的前后端分层，兼容后续业务增长。"
+        },
+        "tenant": {
+          "title": "组织与项目层级清晰",
+          "description": "围绕 Organization / Project / Resource 模型建立真正可持续的多人协作工作室。"
+        },
+        "runtime": {
+          "title": "部署与运行目录规范",
+          "description": "统一走 Docker Compose 与 runtime/ 目录约束，兼容宝塔 Linux 的部署方式。"
+        },
+        "realtime": {
+          "title": "为实时协同预留演进空间",
+          "description": "当前已具备首版 Presence 与 revision 冲突机制，后续可继续升级到更强协同模型。"
+        }
+      }
+    },
+    "heroTitle": "为 HOI4 Modding 团队打造的在线协作工作室",
+    "heroSubtitle": "以多人实时协作、国策树设计、本地化管理与组织级资源协作为核心，面向长期扩展而设计。",
+    "projectSectionTitle": "核心能力",
+    "architectureSectionTitle": "架构方向"
+  },
+  "studio": {
+    "roles": {
+      "owner": "所有者",
+      "admin": "管理员",
+      "maintainer": "维护者",
+      "editor": "编辑",
+      "viewer": "查看者",
+      "guest": "访客"
+    },
+    "page": {
+      "eyebrow": "Organization Console",
+      "title": "我的组织",
+      "subtitle": "仅显示当前账号已加入的组织，以及对应的库与项目概览。",
+      "primaryCta": "创建组织",
+      "secondaryCta": "返回首页",
+      "authCardTag": "当前账号",
+      "scopeTitle": "访问范围",
+      "scopeDescription": "Studio 首页只展示你所属组织的内容，项目入口将从所属组织继续展开。",
+      "loading": "正在加载组织列表…",
+      "error": "组织数据暂时不可用。",
+      "emptyTitle": "暂无可访问的组织",
+      "emptyDescription": "创建新组织，或等待加入现有组织。",
+      "sectionTag": "Organizations",
+      "sectionTitle": "组织列表",
+      "sectionDescription": "从这里进入你所属组织的工作内容。",
+      "openOrganization": "进入组织",
+      "repositories": "库",
+      "projects": "项目",
+      "updatedAt": "最近更新",
+      "stats": {
+        "organizations": "Organizations",
+        "repositories": "Repositories",
+        "projects": "Projects",
+        "memberships": "Memberships"
+      },
+      "statsHints": {
+        "organizations": "当前账号可访问的组织数量",
+        "repositories": "已接入的库总数",
+        "projects": "已登记的项目总数",
+        "memberships": "当前账号的组织成员身份"
+      }
+    },
+    "organization": {
+      "back": "返回我的组织",
+      "eyebrow": "Organization Workspace",
+      "subtitle": "查看当前组织下的项目与基础信息。",
+      "loading": "正在加载组织内容…",
+      "accessDeniedTitle": "无法访问该组织",
+      "accessDeniedDescription": "当前账号未加入该组织，或组织信息不可用。",
+      "createProject": "新建项目",
+      "projectsTag": "Projects",
+      "projectsTitle": "项目列表",
+      "projectsDescription": "当前组织下的全部项目入口。",
+      "emptyProjects": "当前组织下还没有项目。",
+      "openProject": "进入项目",
+      "projectDescriptionFallback": "暂无项目说明。",
+      "stats": {
+        "repositories": "Repositories",
+        "projects": "Projects",
+        "role": "Role",
+        "updated": "Updated"
+      }
+    }
+  }
+}

@@ -1,0 +1,461 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum GlobalRole {
+  user
+  admin
+}
+
+enum OrganizationRole {
+  owner
+  admin
+  maintainer
+  editor
+  viewer
+  guest
+}
+
+enum MembershipStatus {
+  active
+  invited
+  suspended
+  removed
+}
+
+enum OrganizationInviteStatus {
+  pending
+  accepted
+  expired
+  revoked
+}
+
+enum RepositoryVisibility {
+  private
+  internal
+}
+
+enum TeamRoleScope {
+  organization
+  repository
+  project
+}
+
+enum ProjectPermission {
+  project_view
+  project_edit
+  project_delete
+  resource_view
+  resource_edit
+  resource_delete
+  focus_tree_view
+  focus_tree_edit
+  localization_view
+  localization_edit
+  collaboration_manage
+  release_manage
+}
+
+enum ProjectType {
+  general
+  hoi4
+}
+
+enum ResourceType {
+  doc
+  markdown
+  diagram
+  task_tree
+  asset_file
+  pdf
+  hoi4_focus_tree
+  hoi4_localization
+  hoi4_event
+  hoi4_decision
+}
+
+enum AuthProvider {
+  local
+  github
+  google
+  oidc
+  saml
+}
+
+enum UserEmailStatus {
+  pending
+  verified
+}
+
+enum UserAccountStatus {
+  active
+  pending_verification
+  locked
+  disabled
+}
+
+enum TokenPurpose {
+  email_verification
+  password_reset
+  organization_invite
+}
+
+enum SsoProviderType {
+  oidc
+  saml
+}
+
+model User {
+  id                        String                        @id @default(cuid())
+  username                  String                        @unique
+  displayName               String
+  avatarUrl                 String?                       @db.Text
+  globalRole                GlobalRole                    @default(user)
+  accountStatus             UserAccountStatus             @default(pending_verification)
+  passwordHash              String?                       @db.Text
+  primaryEmailId            String?                       @unique
+  lastLoginAt               DateTime?
+  createdAt                 DateTime                      @default(now())
+  updatedAt                 DateTime                      @updatedAt
+  memberships               OrganizationMember[]
+  emails                    UserEmail[]
+  authIdentities            AuthIdentity[]
+  sessions                  UserSession[]
+  verificationTokens        VerificationToken[]
+  passwordResetTokens       PasswordResetToken[]
+  invitedOrganizations      OrganizationInvite[]          @relation("InviteAcceptedBy")
+  memberInvitationsAccepted OrganizationMember[]          @relation("OrganizationMemberInvitedBy")
+  organizationInvitesCreated OrganizationInvite[]         @relation("OrganizationInviteCreatedBy")
+  projectPermissionsGranted ProjectPermissionAssignment[] @relation("ProjectPermissionGrantedBy")
+  primaryEmail              UserEmail?                    @relation("PrimaryEmail", fields: [primaryEmailId], references: [id], onDelete: SetNull)
+
+  @@map("users")
+}
+
+model UserEmail {
+  id          String          @id @default(cuid())
+  userId      String
+  email       String          @unique
+  status      UserEmailStatus @default(pending)
+  isPrimary   Boolean         @default(false)
+  verifiedAt  DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryForUser User?        @relation("PrimaryEmail")
+
+  @@index([userId])
+  @@map("user_emails")
+}
+
+model AuthIdentity {
+  id                    String       @id @default(cuid())
+  userId                String
+  provider              AuthProvider
+  providerAccountId     String
+  email                 String?
+  displayName           String?
+  avatarUrl             String?      @db.Text
+  accessTokenEncrypted  String?      @db.Text
+  refreshTokenEncrypted String?      @db.Text
+  expiresAt             DateTime?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  user                  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("auth_identities")
+}
+
+model UserSession {
+  id             String       @id @default(cuid())
+  userId         String
+  provider       AuthProvider @default(local)
+  tokenHash      String       @unique @db.VarChar(191)
+  ipAddress      String?
+  userAgent      String?      @db.Text
+  expiresAt      DateTime
+  revokedAt      DateTime?
+  lastUsedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_sessions")
+}
+
+model VerificationToken {
+  id          String       @id @default(cuid())
+  userId      String
+  email       String
+  purpose     TokenPurpose @default(email_verification)
+  tokenHash   String       @unique @db.VarChar(191)
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([email])
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id          String    @id @default(cuid())
+  userId      String
+  tokenHash   String    @unique @db.VarChar(191)
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Organization {
+  id            String                 @id @default(cuid())
+  name          String
+  slug          String                 @unique
+  description   String?                @db.Text
+  avatarUrl     String?                @db.Text
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  members       OrganizationMember[]
+  invites       OrganizationInvite[]
+  repositories  Repository[]
+  projects      Project[]
+  resources     Resource[]
+  teamRoles     TeamRole[]
+  ssoConfigs    OrganizationSsoConfig[]
+  domains       OrganizationDomain[]
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id               String                @id @default(cuid())
+  userId           String
+  organizationId   String
+  role             OrganizationRole
+  status           MembershipStatus      @default(active)
+  joinedAt         DateTime?
+  invitedByUserId  String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignedTeamRoles TeamRoleAssignment[]
+  projectAssignments ProjectPermissionAssignment[]
+  invitedBy        User?                 @relation("OrganizationMemberInvitedBy", fields: [invitedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
+  @@map("organization_members")
+}
+
+model OrganizationInvite {
+  id                  String                   @id @default(cuid())
+  organizationId      String
+  email               String
+  tokenHash           String                   @unique @db.VarChar(191)
+  status              OrganizationInviteStatus @default(pending)
+  organizationRole    OrganizationRole         @default(viewer)
+  teamRoleId          String?
+  invitedByUserId     String?
+  acceptedByUserId    String?
+  expiresAt           DateTime
+  acceptedAt          DateTime?
+  revokedAt           DateTime?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  organization        Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  teamRole            TeamRole?                @relation(fields: [teamRoleId], references: [id], onDelete: SetNull)
+  invitedBy           User?                    @relation("OrganizationInviteCreatedBy", fields: [invitedByUserId], references: [id], onDelete: SetNull)
+  acceptedBy          User?                    @relation("InviteAcceptedBy", fields: [acceptedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@index([email])
+  @@map("organization_invites")
+}
+
+model Repository {
+  id             String               @id @default(cuid())
+  organizationId String
+  name           String
+  slug           String
+  description    String?              @db.Text
+  visibility     RepositoryVisibility @default(private)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects       Project[]
+  resources      Resource[]
+  teamRoles      TeamRole[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@map("repositories")
+}
+
+model TeamRole {
+  id             String            @id @default(cuid())
+  organizationId String
+  repositoryId   String?
+  name           String
+  slug           String
+  description    String?           @db.Text
+  scope          TeamRoleScope     @default(project)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  repository     Repository?       @relation(fields: [repositoryId], references: [id], onDelete: SetNull)
+  permissions    TeamRolePermission[]
+  assignments    TeamRoleAssignment[]
+  inviteDefaults OrganizationInvite[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@index([repositoryId])
+  @@map("team_roles")
+}
+
+model TeamRolePermission {
+  id         String            @id @default(cuid())
+  teamRoleId String
+  permission ProjectPermission
+  createdAt  DateTime          @default(now())
+  teamRole   TeamRole          @relation(fields: [teamRoleId], references: [id], onDelete: Cascade)
+
+  @@unique([teamRoleId, permission])
+  @@index([teamRoleId])
+  @@map("team_role_permissions")
+}
+
+model TeamRoleAssignment {
+  id                   String             @id @default(cuid())
+  organizationMemberId String
+  teamRoleId           String
+  projectId            String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  organizationMember   OrganizationMember @relation(fields: [organizationMemberId], references: [id], onDelete: Cascade)
+  teamRole             TeamRole           @relation(fields: [teamRoleId], references: [id], onDelete: Cascade)
+  project              Project?           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationMemberId, teamRoleId, projectId])
+  @@index([organizationMemberId])
+  @@index([teamRoleId])
+  @@index([projectId])
+  @@map("team_role_assignments")
+}
+
+model Project {
+  id             String       @id @default(cuid())
+  organizationId String
+  repositoryId   String
+  name           String
+  slug           String
+  type           ProjectType
+  description    String?      @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  repository     Repository   @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  resources      Resource[]
+  permissionAssignments ProjectPermissionAssignment[]
+  teamRoleAssignments   TeamRoleAssignment[]
+
+  @@unique([repositoryId, slug])
+  @@index([organizationId])
+  @@index([repositoryId])
+  @@map("projects")
+}
+
+model ProjectPermissionAssignment {
+  id                   String             @id @default(cuid())
+  organizationMemberId String
+  projectId            String
+  permission           ProjectPermission
+  grantedByUserId      String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  organizationMember   OrganizationMember @relation(fields: [organizationMemberId], references: [id], onDelete: Cascade)
+  project              Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  grantedBy            User?              @relation("ProjectPermissionGrantedBy", fields: [grantedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([organizationMemberId, projectId, permission])
+  @@index([organizationMemberId])
+  @@index([projectId])
+  @@map("project_permission_assignments")
+}
+
+model Resource {
+  id             String       @id @default(cuid())
+  organizationId String
+  repositoryId   String
+  projectId      String
+  type           ResourceType
+  title          String
+  slug           String
+  summary        String?      @db.Text
+  content        Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  repository     Repository   @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, slug])
+  @@index([organizationId])
+  @@index([repositoryId])
+  @@index([projectId])
+  @@index([type])
+  @@map("resources")
+}
+
+model OrganizationSsoConfig {
+  id                 String          @id @default(cuid())
+  organizationId     String
+  providerType       SsoProviderType
+  name               String
+  issuer             String?         @db.Text
+  entryPoint         String?         @db.Text
+  audience           String?         @db.Text
+  clientId           String?         @db.Text
+  clientSecret       String?         @db.Text
+  certificate        String?         @db.Text
+  enforceSso         Boolean         @default(false)
+  jitProvisioning    Boolean         @default(false)
+  enabled            Boolean         @default(false)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  organization       Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("organization_sso_configs")
+}
+
+model OrganizationDomain {
+  id              String        @id @default(cuid())
+  organizationId  String
+  domain          String        @unique
+  isVerified      Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  organization    Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("organization_domains")
+}
