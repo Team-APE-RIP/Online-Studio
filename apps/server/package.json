@@ -8,7 +8,7 @@
     "start": "npm run with:db-env -- node dist/apps/server/src/main.js",
     "start:dev": "npm run build --workspace @team-ape-rip/shared && npm run build && npm run with:db-env -- node dist/apps/server/src/main.js",
     "start:prod": "npm run with:db-env -- node dist/apps/server/src/main.js",
-    "prisma:generate": "npm run with:db-env -- prisma generate",
+    "prisma:generate": "prisma generate",
     "prisma:migrate": "npm run with:db-env -- prisma migrate deploy",
     "prisma:migrate:dev": "npm run with:db-env -- prisma migrate dev",
     "prisma:push": "npm run with:db-env -- prisma db push",

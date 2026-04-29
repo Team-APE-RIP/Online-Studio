@@ -1,6 +1,6 @@
 services:
   server:
-    image: node:20-alpine
+    image: node:20-bookworm-slim
     container_name: team-ape-rip-server
     restart: unless-stopped
     working_dir: /app
@@ -20,7 +20,7 @@ services:
       "
     volumes:
       - ${PROJECT_ROOT}:/app
-      - team-ape-rip-node-modules:/app/node_modules
+      - team-ape-rip-server-node-modules:/app/node_modules
       - ${PROJECT_ROOT}/runtime/logs/server:/app/runtime/logs/server
       - ${PROJECT_ROOT}/runtime/uploads:/app/runtime/uploads
       - ${PROJECT_ROOT}/runtime/temp:/app/runtime/temp
@@ -32,7 +32,7 @@ services:
       - team-ape-rip-network
 
   web:
-    image: node:20-alpine
+    image: node:20-bookworm-slim
     container_name: team-ape-rip-web
     restart: unless-stopped
     working_dir: /app
@@ -50,7 +50,7 @@ services:
       "
     volumes:
       - ${PROJECT_ROOT}:/app
-      - team-ape-rip-node-modules:/app/node_modules
+      - team-ape-rip-web-node-modules:/app/node_modules
       - ${PROJECT_ROOT}/runtime/logs/web:/app/runtime/logs/web
       - ${PROJECT_ROOT}/runtime/compose/web:/app/runtime/compose/web
     depends_on:
@@ -63,4 +63,5 @@ networks:
     driver: bridge
 
 volumes:
-  team-ape-rip-node-modules:
+  team-ape-rip-server-node-modules:
+  team-ape-rip-web-node-modules:
